@@ -1,57 +1,754 @@
-<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ミリプロ バッジガチャ</title>
-  <meta name="description" content="ミリプロメンバーの表情差分バッジを集める非公式ファンメイドガチャ。">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-<main class="app">
-  <header class="hero">
-    <p class="eyebrow">MILPRO FANMADE GACHA</p>
-    <h1>ミリプロ<br><span>バッジガチャ</span></h1>
-    <p class="lead">推しを選んで、表情ちがいのバッジを集めよう。</p>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ミリプロ推しガチャ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DM+Mono:wght@500&display=swap">
+<style>
+/* Layout: a card table. Felt-like midnight ground, 推し bar + draw zone up top, tabs for 図鑑・履歴・画像設定 below. Single dark look by choice. */
+:root{
+  --felt:#16132b;
+  --felt-2:#1f1b3d;
+  --rail:#2c2754;
+  --ink:#f3eefc;
+  --mute:#a9a1c9;
+  --gold:#e8c46a;
+  --gold-2:#fff0b8;
+  --sr:#8fb8ff;
+  --r:#b9b2d6;
+  --heart:#ff7aa8;
+  --danger:#ff8a8a;
+  --f-display:"Dela Gothic One","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-num:"DM Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--felt);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.6;
+  background:radial-gradient(120% 60% at 50% 0%,var(--felt-2),var(--felt) 70%) fixed,var(--felt)}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 64px;display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(28px,6vw,44px);line-height:1.1;margin:0;letter-spacing:.02em;text-wrap:balance}
+h1 .suits{display:block;font-family:var(--f-num);font-size:13px;letter-spacing:.5em;color:var(--gold);margin-bottom:6px}
+.stats{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--mute)}
+.stats b{font-family:var(--f-num);color:var(--ink);font-size:16px;font-variant-numeric:tabular-nums;margin-left:4px}
+.stats .h b{color:var(--heart)}
+
+/* table */
+.table{border:1px solid var(--rail);border-radius:20px;padding:20px 16px;background:rgba(255,255,255,.02);display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:13px;color:var(--mute)}
+.lbl{letter-spacing:.12em;font-family:var(--f-num);font-size:12px}
+select,input[type=color],button{font:inherit}
+select{background:var(--felt);color:var(--ink);border:1px solid var(--rail);border-radius:8px;padding:6px 10px;max-width:100%}
+.rates{font-family:var(--f-num);font-size:12px;color:var(--mute)}
+
+/* 推し bar */
+.oshibar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-bottom:14px;border-bottom:1px dashed var(--rail)}
+.oshibar .lbl{color:var(--heart)}
+.ochips{display:flex;flex-wrap:wrap;gap:6px}
+.ochip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:999px;background:color-mix(in srgb,var(--c) 28%,var(--felt));border:1px solid color-mix(in srgb,var(--c) 70%,transparent);font-size:13px;color:var(--ink)}
+.ochip i{width:20px;height:20px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-style:normal;font-size:11px;color:#fff;overflow:hidden}
+.ochip i img{width:100%;height:100%;object-fit:cover}
+.oempty{font-size:13px;color:var(--mute)}
+.picker{display:flex;flex-wrap:wrap;gap:6px;padding:12px;border-radius:12px;background:rgba(0,0,0,.18)}
+.picker p{flex-basis:100%;margin:0 0 4px;font-size:12px;color:var(--mute)}
+.pk{border:1px solid var(--rail);background:transparent;color:var(--ink);border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer}
+.pk[aria-pressed=true]{background:color-mix(in srgb,var(--c) 35%,var(--felt));border-color:var(--c)}
+.pk[aria-pressed=true]::before{content:"♥ ";color:var(--heart)}
+
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;min-height:120px}
+.grid.single{grid-template-columns:minmax(0,220px);justify-content:center}
+@media (max-width:640px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:28px 8px;font-size:14px}
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.btn{border:0;border-radius:999px;padding:12px 24px;cursor:pointer;font-weight:700;letter-spacing:.06em;transition:transform .12s,filter .12s}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible,.tab:focus-visible,select:focus-visible,.mini:focus-visible,.pk:focus-visible,.heartbtn:focus-visible,.card:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
+.btn-1{background:var(--rail);color:var(--ink)}
+.btn-10{background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#2a2108;font-family:var(--f-display);font-weight:400;font-size:17px}
+.btn-ghost{background:transparent;color:var(--mute);border:1px solid var(--rail)}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* card */
+.card{perspective:900px;aspect-ratio:5/7;max-width:100%;cursor:pointer;border-radius:12px}
+.card .in{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.card.open .in{transform:rotateY(180deg)}
+.face,.back{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.back{background:repeating-linear-gradient(45deg,var(--rail) 0 6px,var(--felt-2) 6px 12px);border:2px solid var(--gold);display:grid;place-items:center}
+.back span{font-family:var(--f-num);color:var(--gold);font-size:clamp(11px,2.4vw,15px);letter-spacing:.3em;background:var(--felt);padding:6px 8px;border-radius:6px}
+.card.hint-ssr:not(.open) .back{box-shadow:0 0 0 2px var(--gold-2),0 0 22px var(--gold);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 2px var(--gold-2),0 0 34px var(--gold)}}
+.face{transform:rotateY(180deg);background:var(--c,#888);border:2px solid var(--frame);display:flex;flex-direction:column;justify-content:flex-end}
+.face img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-size:clamp(34px,8vw,64px);color:rgba(255,255,255,.9);
+  background:radial-gradient(80% 60% at 30% 20%,rgba(255,255,255,.35),transparent 60%),linear-gradient(160deg,var(--c),color-mix(in srgb,var(--c) 55%,#140f2a))}
+.face .rar{position:absolute;top:6px;left:6px;font-family:var(--f-num);font-size:11px;padding:2px 7px;border-radius:999px;background:var(--frame);color:#1a1530;letter-spacing:.05em}
+.face .nm{position:relative;padding:18px 8px 8px;background:linear-gradient(transparent,rgba(12,10,28,.85));font-weight:700;font-size:clamp(11px,2.3vw,14px);line-height:1.3;color:#fff}
+.face .nm small{display:block;font-weight:400;font-size:10px;color:#d8d2f0;letter-spacing:.04em}
+.face .nm .hh{color:var(--heart)}
+.r-SSR{--frame:var(--gold)}.r-SR{--frame:var(--sr)}.r-R{--frame:var(--r)}
+.card.open.r-SSR .face{box-shadow:0 0 0 1px var(--gold-2),0 0 26px rgba(232,196,106,.55)}
+.card.open.r-SSR .face::after,.big .face::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 45%,transparent 60%);background-size:250% 100%;animation:shine 2.4s ease-in-out infinite}
+.card .new{position:absolute;top:6px;right:6px;z-index:2;font-family:var(--f-num);font-size:10px;background:var(--danger);color:#1a0b0b;border-radius:4px;padding:1px 5px}
+@keyframes shine{0%{background-position:120% 0}100%{background-position:-120% 0}}
+
+/* tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--rail);overflow-x:auto}
+.tab{background:none;border:0;color:var(--mute);padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-weight:500}
+.tab[aria-selected=true]{color:var(--ink);border-color:var(--gold)}
+.panel{padding-top:16px}
+.note{font-size:13px;color:var(--mute);margin:0 0 12px;max-width:65ch}
+
+.dex{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.dex .item{display:flex;flex-direction:column;gap:6px;position:relative}
+.dex .card{cursor:default}
+.dex .counts{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-num);font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.dex .counts .s{color:var(--gold)}.dex .counts .sr{color:var(--sr)}
+.dex .unowned .card{filter:grayscale(1) brightness(.5)}
+.heartbtn{position:absolute;top:6px;right:6px;z-index:3;width:30px;height:30px;border-radius:50%;border:0;cursor:pointer;background:rgba(12,10,28,.7);color:var(--mute);font-size:15px;line-height:30px}
+.heartbtn[aria-pressed=true]{color:var(--heart);background:rgba(12,10,28,.85)}
+
+.hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.hist li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.03)}
+.hist time{font-family:var(--f-num);font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums;min-width:96px}
+.chip{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--rail)}
+.chip.SSR{border-color:var(--gold);color:var(--gold-2)}.chip.SR{border-color:var(--sr);color:var(--sr)}
+.chip .hh{color:var(--heart)}
+
+.setlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.set{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--rail);border-radius:12px;min-width:0}
+.thumb{width:48px;height:64px;border-radius:6px;flex:none;background:var(--c);overflow:hidden;display:grid;place-items:center;font-family:var(--f-display);color:#fff}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.set .meta{flex:1;min-width:0}
+.set .meta b{display:block;font-size:14px}
+.set .meta span{font-size:11px;color:var(--mute)}
+.set .ctl{display:flex;align-items:center;gap:6px}
+.mini{background:var(--rail);color:var(--ink);border:0;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer}
+input[type=color]{width:28px;height:28px;border:0;padding:0;background:none;cursor:pointer}
+.bulk{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.toast{position:fixed;z-index:80;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--gold-2);color:#2a2108;padding:8px 16px;border-radius:999px;font-weight:700;font-size:13px}
+.danger-zone{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.danger-zone .btn{padding:8px 16px;font-size:13px}
+.confirm{color:var(--danger);font-size:13px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- SSR 演出 ---------- */
+.fx{position:fixed;inset:0;z-index:60;background:rgba(8,6,20,.94);display:grid;place-items:center;overflow:hidden;cursor:pointer;
+  padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px);--mc:var(--gold)}
+.fx canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.fx .rays{position:absolute;left:50%;top:50%;width:220vmax;height:220vmax;translate:-50% -50%;opacity:0;
+  background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--mc) 40%,transparent) 0 6deg,transparent 6deg 18deg);
+  -webkit-mask:radial-gradient(circle,#000 0,transparent 45%);mask:radial-gradient(circle,#000 0,transparent 45%)}
+.fx .orb{position:absolute;left:50%;top:50%;width:40px;height:40px;translate:-50% -50%;border-radius:50%;scale:0;
+  background:radial-gradient(circle,#fff 0,var(--gold-2) 30%,var(--gold) 55%,transparent 70%)}
+.fx .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.fx .stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;width:min(300px,64vw)}
+.fx .word{font-family:var(--f-display);font-size:clamp(44px,14vw,88px);line-height:1;letter-spacing:.06em;
+  background:linear-gradient(180deg,#fff 10%,var(--gold-2) 40%,var(--gold) 70%,#b07d2a);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 18px rgba(232,196,106,.6));margin-bottom:-6px}
+.fx .oshitag{font-family:var(--f-display);font-size:clamp(16px,4.6vw,22px);color:#fff;background:var(--heart);padding:4px 16px;border-radius:999px;letter-spacing:.1em;box-shadow:0 0 24px var(--heart)}
+.fx .big{width:100%;aspect-ratio:5/7;position:relative;border-radius:16px;box-shadow:0 0 0 2px var(--gold-2),0 0 60px color-mix(in srgb,var(--mc) 70%,transparent)}
+.fx .big .face{transform:none;border-width:3px;border-radius:16px}
+.fx .big .face .nm{font-size:16px}
+.fx .fxname{font-family:var(--f-display);font-size:clamp(20px,5.5vw,28px);text-align:center;line-height:1.2;text-wrap:balance}
+.fx .fxname small{display:block;font-family:var(--f-body);font-size:12px;color:var(--mute);letter-spacing:.1em;margin-top:4px}
+.fx .fxhint{font-size:12px;color:var(--mute);letter-spacing:.1em;margin:4px 0 0;opacity:0}
+
+.fx.p1 .orb{animation:orb 1.1s cubic-bezier(.5,0,.8,.4) forwards}
+.fx.p1 .rays{animation:rays-in 1.1s ease-in forwards,spin 14s linear infinite}
+.fx.p2 .rays{opacity:.9;animation:spin 14s linear infinite}
+.fx.p2 .flash{animation:flash .7s ease-out forwards}
+.fx.p2 .orb{scale:0;animation:none}
+.fx.p2 .stage{animation:stage-in .7s cubic-bezier(.2,1.4,.4,1) .05s forwards}
+.fx.p2 .big{animation:big-in .9s cubic-bezier(.2,1.2,.4,1) .05s both}
+.fx.p2 .word{animation:stamp .5s cubic-bezier(.2,1.6,.4,1) .45s both}
+.fx.p2 .oshitag{animation:stamp .5s cubic-bezier(.2,1.6,.4,1) .75s both}
+.fx.p2 .fxhint{animation:fade .4s ease 1.4s forwards}
+@keyframes orb{0%{scale:0}70%{scale:4}100%{scale:30}}
+@keyframes rays-in{to{opacity:.6}}
+@keyframes spin{to{rotate:360deg}}
+@keyframes flash{0%{opacity:1}100%{opacity:0}}
+@keyframes stage-in{to{opacity:1}}
+@keyframes big-in{0%{transform:perspective(800px) rotateY(540deg) scale(.4)}100%{transform:perspective(800px) rotateY(0) scale(1)}}
+@keyframes stamp{0%{transform:scale(2.4);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes fade{to{opacity:1}}
+
+
+/* ---------- 開封パック演出 ---------- */
+.packfx{position:fixed;inset:0;z-index:55;background:rgba(7,5,18,.94);display:grid;place-items:center;overflow:hidden;
+  padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));touch-action:none}
+.packfx[hidden]{display:none!important}
+.packfx::before{content:"";position:absolute;inset:-20%;background:
+  radial-gradient(circle at 50% 48%,rgba(143,184,255,.12),transparent 28%),
+  radial-gradient(circle at 50% 48%,rgba(232,196,106,.08),transparent 44%);
+  transform:scale(.7);opacity:0;transition:opacity .4s,transform .5s}
+.packfx.ready::before{opacity:1;transform:scale(1)}
+.packscene{position:relative;width:min(340px,78vw);display:flex;flex-direction:column;align-items:center;gap:14px}
+.pack-kicker{font-family:var(--f-num);font-size:11px;letter-spacing:.28em;color:var(--mute);text-align:center;min-height:1.4em}
+.foilpack{position:relative;width:min(270px,68vw);aspect-ratio:7/10;border-radius:14px 14px 18px 18px;overflow:visible;
+  filter:drop-shadow(0 24px 38px rgba(0,0,0,.45));transform:translateY(80px) scale(.78) rotate(-4deg);opacity:0}
+.packfx.ready .foilpack{animation:pack-enter .58s cubic-bezier(.2,1.25,.35,1) forwards}
+.foil-body{position:absolute;inset:0;border-radius:inherit;overflow:hidden;border:1px solid rgba(255,255,255,.45);
+  background:
+    linear-gradient(105deg,transparent 0 13%,rgba(255,255,255,.44) 18%,transparent 25% 47%,rgba(255,255,255,.25) 53%,transparent 60%),
+    repeating-linear-gradient(100deg,#716b82 0 11px,#d9d8de 12px 21px,#8e8998 22px 31px,#f5f4f7 32px 42px);
+  background-size:240% 100%,100% 100%;animation:foil-shine 2.8s linear infinite}
+.foil-body::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,16,41,.14),rgba(20,16,41,.48));pointer-events:none}
+.pack-brand{position:absolute;z-index:2;inset:23% 10% auto;text-align:center;color:#16132b;text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.pack-brand .suits{display:block;font-family:var(--f-num);font-size:12px;letter-spacing:.5em;color:#5c516f;margin-bottom:12px}
+.pack-brand b{display:block;font-family:var(--f-display);font-weight:400;font-size:clamp(25px,7.5vw,38px);letter-spacing:.06em;line-height:1.05}
+.pack-brand small{display:block;font-family:var(--f-num);font-size:9px;letter-spacing:.2em;margin-top:10px;color:#514b5b}
+.pack-count{position:absolute;z-index:3;right:14px;bottom:18px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  background:#16132b;color:var(--gold-2);font-family:var(--f-display);font-size:16px;border:2px solid var(--gold)}
+.tearzone{position:absolute;z-index:5;left:-2px;right:-2px;top:10%;height:54px;cursor:grab;touch-action:none}
+.tearzone::before{content:"";position:absolute;left:0;right:0;top:26px;border-top:2px dashed rgba(30,25,43,.68)}
+.tearzone .teartext{position:absolute;left:50%;top:2px;translate:-50% 0;background:rgba(245,244,247,.78);color:#302a3d;
+  font-family:var(--f-num);font-size:8px;letter-spacing:.12em;padding:2px 7px;border-radius:999px;white-space:nowrap}
+.tearprogress{position:absolute;left:0;top:25px;height:4px;width:0;border-radius:999px;background:var(--gold-2);box-shadow:0 0 12px var(--gold)}
+.packtop{position:absolute;z-index:6;left:0;right:0;top:0;height:calc(10% + 28px);overflow:hidden;border-radius:14px 14px 2px 2px;
+  background:linear-gradient(105deg,#7a7486,#efedf1 25%,#888293 50%,#f7f6f8 75%,#807a8c);border-bottom:1px solid rgba(45,39,57,.45);
+  transition:transform .48s cubic-bezier(.2,.9,.2,1),opacity .36s}
+.packhint{margin:0;color:var(--mute);font-size:12px;letter-spacing:.04em;text-align:center;min-height:20px}
+.packtap{border:1px solid var(--rail);background:transparent;color:var(--ink);border-radius:999px;padding:8px 15px;font-size:12px;cursor:pointer}
+.packfx.has-ssr .foilpack{filter:drop-shadow(0 0 20px rgba(232,196,106,.42)) drop-shadow(0 24px 38px rgba(0,0,0,.45))}
+.packfx.has-ssr .foil-body{box-shadow:inset 0 0 0 2px rgba(255,240,184,.75),0 0 32px rgba(232,196,106,.32)}
+.packfx.has-ssr .pack-kicker{color:var(--gold-2);animation:tease 1.1s ease-in-out infinite}
+.packfx.has-oshi-ssr .foil-body{box-shadow:inset 0 0 0 2px rgba(255,122,168,.85),0 0 42px rgba(255,122,168,.42)}
+.packfx.has-oshi-ssr .pack-kicker{color:#ffb4cf}
+.packfx.has-oshi-ssr::after{content:"♥";position:absolute;inset:auto 0 12%;text-align:center;color:rgba(255,122,168,.13);font-size:42vw;line-height:.5;
+  font-family:var(--f-display);pointer-events:none;animation:heart-breathe 1.1s ease-in-out infinite}
+.packfx.opening .packtop{transform:translate(44vw,-70px) rotate(23deg);opacity:0}
+.packfx.opening .foilpack{animation:pack-open .62s cubic-bezier(.2,.9,.2,1) forwards}
+.packfx .openflash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.packfx.opening .openflash{animation:pack-flash .52s ease-out forwards}
+.pack-sparkbox{position:absolute;inset:0;pointer-events:none}
+.pack-sparkbox i{position:absolute;left:50%;top:48%;width:8px;height:8px;border-radius:50%;background:var(--gold-2);opacity:0}
+.packfx.opening .pack-sparkbox i{animation:spark-pop .7s ease-out forwards;animation-delay:var(--d,0s)}
+.packfx.has-oshi-ssr .pack-sparkbox i:nth-child(3n){background:var(--heart)}
+@keyframes pack-enter{to{transform:translateY(0) scale(1) rotate(0);opacity:1}}
+@keyframes foil-shine{to{background-position:-240% 0,0 0}}
+@keyframes tease{50%{text-shadow:0 0 14px currentColor;transform:scale(1.05)}}
+@keyframes heart-breathe{50%{transform:scale(1.08);opacity:.8}}
+@keyframes pack-open{0%{transform:scale(1)}35%{transform:scale(1.06) rotate(-2deg)}100%{transform:translateY(42px) scale(.88);opacity:0}}
+@keyframes pack-flash{0%{opacity:.9}100%{opacity:0}}
+@keyframes spark-pop{0%{opacity:1;transform:translate(0,0) scale(.3)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.1)}}
+
+@media (prefers-reduced-motion:reduce){
+  .card .in{transition:none}
+  .card.open.r-SSR .face::after,.big .face::after,.card.hint-ssr:not(.open) .back{animation:none}
+  .fx.p1 .orb,.fx.p1 .rays,.fx.p2 .rays,.fx.p2 .big,.fx.p2 .word,.fx.p2 .oshitag,.fx.p2 .flash{animation:none}
+  .fx.p2 .rays{opacity:.5}
+  .fx.p2 .stage{animation:fade .3s forwards}
+  .fx.p2 .fxhint{opacity:1;animation:none}
+  .packfx.ready .foilpack,.packfx.opening .foilpack,.packfx.opening .openflash,.packfx .foil-body,.packfx .pack-kicker,.packfx::after{animation:none!important}
+  .packfx.ready .foilpack{transform:none;opacity:1}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1><span class="suits" aria-hidden="true">♠ ♥ ♦ ♣</span>ミリプロ推しガチャ</h1>
+    <div class="stats" aria-live="polite">
+      <span>総ガチャ数<b id="stTotal">0</b></span>
+      <span>SSR<b id="stSSR">0</b></span>
+      <span class="h">推しSSR<b id="stOshi">0</b></span>
+      <span>図鑑<b id="stDex">0/0</b></span>
+    </div>
   </header>
 
-  <section class="setup card">
-    <label class="field">
-      <span>推しを選ぶ</span>
-      <select id="oshi"></select>
-    </label>
-    <div class="rate-note">金バッジ対象：虹深°ぬふ / ゆらぎゆら / 小廻こま</div>
+  <section class="table" aria-label="ガチャ">
+    <div class="oshibar">
+      <span class="lbl">♥ 推し</span>
+      <div class="ochips" id="ochips"></div>
+      <button class="mini" id="oshiEdit" aria-expanded="false" aria-controls="picker">推しを登録</button>
+    </div>
+    <div class="picker" id="picker" hidden></div>
+    <div class="row">
+      <label class="lbl" for="pickSel">PICK UP</label>
+      <select id="pickSel"></select>
+      <span class="rates" id="rates"></span>
+    </div>
+    <div class="grid" id="grid"><p class="empty">ボタンを押すとパックが届きます。切り取り線をなぞって開封 → 中身は1枚ずつタップでめくれます。光っているカードはSSRです。</p></div>
+    <div class="actions">
+      <button class="btn btn-1" id="pull1">単発ガチャ</button>
+      <button class="btn btn-10" id="pull10">10連ガチャ</button>
+      <button class="btn btn-ghost" id="flipAll" hidden>すべてめくる</button>
+      <button class="btn btn-ghost" id="copyRes" hidden>結果をコピー</button>
+    </div>
   </section>
 
-  <section class="machine card">
-    <div class="machine-top">
-      <span>BADGE CAPSULE</span>
-      <b id="countLabel">0 pulls</b>
+  <section>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="dex">図鑑</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="hist">履歴</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="set">画像・カラー・設定</button>
     </div>
-    <div class="window" id="window" aria-live="polite">
-      <div class="idle">
-        <div class="capsule-art">?</div>
-        <p>タップしてガチャを回してね</p>
+    <div class="panel" id="p-dex">
+      <p class="note">♥ を押すと推しに登録できます。</p>
+      <div class="dex" id="dex"></div>
+    </div>
+    <div class="panel" id="p-hist" hidden><ul class="hist" id="hist"></ul></div>
+    <div class="panel" id="p-set" hidden>
+      <p class="note">各メンバーに画像を設定すると、カードに表示されます。縦長（5:7くらい）の画像がきれいに収まります。まとめて選ぶ場合は、ファイル名にメンバー名（例：<code>甘狼このみ.png</code> や <code>konomi.png</code>）を入れると自動で割り当てます。カラーは仮の色なので、お好みで変えてください。虹深°ぬふ・ゆらぎゆら・小廻こまは最終バッジ素材を金仕様にする予定です。設定はこのブラウザに保存されます。</p>
+      <div class="bulk">
+        <label class="btn btn-1" for="bulkIn" style="padding:8px 16px;font-size:13px">画像をまとめて選ぶ</label>
+        <input type="file" id="bulkIn" accept="image/*" multiple class="sr-only">
+        <span class="note" id="bulkMsg" style="margin:0"></span>
+      </div>
+      <div class="setlist" id="setlist"></div>
+      <div class="row" style="margin-top:20px">
+        <label for="fxMode" class="lbl">SSR演出</label>
+        <select id="fxMode">
+          <option value="all">毎回見る</option>
+          <option value="oshi">推しのSSRだけ見る</option>
+          <option value="off">見ない</option>
+        </select>
+      </div>
+      <div class="danger-zone">
+        <button class="btn btn-ghost" id="resetHist">図鑑と履歴をリセット</button>
+        <button class="btn btn-ghost" id="resetImg">画像をすべて削除</button>
+        <span class="confirm" id="confirmMsg"></span>
       </div>
     </div>
-    <button class="pull" id="pullBtn">ガチャを回す</button>
   </section>
+</div>
 
-  <section class="tabs">
-    <button data-tab="collection" class="active">コレクション</button>
-    <button data-tab="history">履歴</button>
-  </section>
-  <section id="panel" class="panel card"></section>
 
-  <footer>
-    非公式ファンメイドです。Million Production / 各タレント・関係者とは関係ありません。
-  </footer>
-</main>
+<div class="packfx" id="packfx" hidden role="dialog" aria-modal="true" aria-label="ガチャ開封" tabindex="-1">
+  <div class="openflash"></div>
+  <div class="pack-sparkbox" id="packSparks" aria-hidden="true"></div>
+  <div class="packscene">
+    <div class="pack-kicker" id="packKicker">READY?</div>
+    <div class="foilpack" id="foilPack">
+      <div class="foil-body"></div>
+      <div class="packtop"></div>
+      <div class="tearzone" id="tearZone" aria-label="ここを右へなぞって開封">
+        <span class="teartext">SWIPE TO TEAR →</span>
+        <span class="tearprogress" id="tearProgress"></span>
+      </div>
+      <div class="pack-brand">
+        <span class="suits">♠ ♥ ♦ ♣</span>
+        <b>MILPRO<br>GACHA</b>
+        <small>RANDOM COLLECTIBLE</small>
+      </div>
+      <div class="pack-count" id="packCount">1</div>
+    </div>
+    <p class="packhint" id="packHint">切り取り線を右へなぞって開封</p>
+    <button class="packtap" id="packTap" type="button">タップで一気に開ける</button>
+  </div>
+</div>
 
-<dialog id="detail"></dialog>
-<script src="assets/app.js"></script>
-</body>
-</html>
+<div class="fx" id="fx" hidden role="dialog" aria-modal="true" aria-label="SSR獲得" tabindex="-1">
+  <canvas id="fxCanvas"></canvas>
+  <div class="rays"></div>
+  <div class="orb"></div>
+  <div class="flash"></div>
+  <div class="stage">
+    <div class="word">SSR</div>
+    <div class="big" id="fxCard"></div>
+    <div class="oshitag" id="fxOshi" hidden>♥ 推し SSR ♥</div>
+    <div class="fxname" id="fxName"></div>
+    <p class="fxhint">タップで次へ</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<input type="file" id="oneIn" accept="image/*" class="sr-only">
+
+<script>
+const MEMBERS=[
+  {id:"konomi",name:"甘狼このみ",en:"Amakami Konomi",group:"0期生",color:"#c9874f",keys:["konomi","amakami"],badge:"normal"},
+  {id:"nono",name:"音ノ乃のの",en:"Nonono Nono",group:"SONA",color:"#e889b3",keys:["nono","nonono"],badge:"normal"},
+  {id:"akubi",name:"あくび・でもんすぺーど",en:"Akubi Demonspade",group:"SONA",color:"#7a5cd6",keys:["akubi","demonspade"],badge:"normal"},
+  {id:"koma",name:"小廻こま",en:"Komawari Koma",group:"3期生",color:"#e45b6b",keys:["koma","komawari"],badge:"gold"},
+  {id:"raco",name:"音ノ瀬らこ",en:"Otonose Raco",group:"NOVA",color:"#e8b13c",keys:["raco","rako","otonose"],badge:"normal"},
+  {id:"yura",name:"ゆらぎゆら",en:"Yuragi Yura",group:"NOVA",color:"#5d86d9",keys:["yura","yuragi"],badge:"gold"},
+  {id:"nuhu",name:"虹深°ぬふ",en:"Nijipuka Nuhu",group:"NOVA",color:"#4fbfb0",keys:["nuhu","nufu","nijipuka"],badge:"gold"},
+  {id:"tsukuri",name:"眠雲ツクリ",en:"Nemukumo Tsukuri",group:"UNI",color:"#9aa7e8",keys:["tsukuri","nemukumo"],badge:"normal"},
+  {id:"liz",name:"雨夜リズ",en:"Amayo Liz",group:"UNI",color:"#5a6fb0",keys:["liz","amayo"],badge:"normal"},
+  {id:"rei",name:"夕霧レイ",en:"Yugiri Ray",group:"UNI",color:"#d07a9a",keys:["rei","yugiri"],badge:"normal"},
+  {id:"mahoro",name:"鹿乃まほろ",en:"Kano Mahoro",group:"SONA",color:"#e0607a",keys:["mahoro","kano"],badge:"normal"}
+];
+const RATE={SSR:3,SR:15,R:82};
+const KEY="milpro-gacha-v1";
+const $=s=>document.querySelector(s);
+
+let S={images:{},colors:{},pickup:"",counts:{},hist:[],total:0,oshi:[],fxMode:"all"};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
+if(!Array.isArray(S.oshi))S.oshi=[];
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S));return true}
+  catch(e){toast("保存容量が足りません。画像を減らすか小さくしてください");return false}
+}
+const byId=Object.fromEntries(MEMBERS.map(m=>[m.id,m]));
+const col=m=>S.colors[m.id]||m.color;
+const isOshi=id=>S.oshi.includes(id);
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ---------- gacha ---------- */
+function rollRarity(min){
+  const r=Math.random()*100;
+  let rar=r<RATE.SSR?"SSR":r<RATE.SSR+RATE.SR?"SR":"R";
+  if(min==="SR"&&rar==="R")rar="SR";
+  return rar;
+}
+function pickupPool(){
+  if(S.pickup==="__oshi")return S.oshi.filter(id=>byId[id]);
+  if(S.pickup&&byId[S.pickup])return [S.pickup];
+  return [];
+}
+function rollMember(rar){
+  const pool=pickupPool();
+  if(pool.length){
+    const boost=rar==="SSR"?0.5:0.2;
+    if(Math.random()<boost)return byId[pool[Math.floor(Math.random()*pool.length)]];
+  }
+  return MEMBERS[Math.floor(Math.random()*MEMBERS.length)];
+}
+let current=[];
+function makeRoll(n){
+  const res=[];
+  const seen=new Set(MEMBERS.filter(m=>{const c=S.counts[m.id];return c&&(c.SSR+c.SR+c.R)>0}).map(m=>m.id));
+  for(let i=0;i<n;i++){
+    const rar=rollRarity(n===10&&i===9?"SR":null);
+    const m=rollMember(rar);
+    const isNew=!seen.has(m.id);
+    seen.add(m.id);
+    res.push({id:m.id,rar,isNew});
+  }
+  return res;
+}
+function commitRoll(n,res){
+  for(const x of res){
+    const c=S.counts[x.id]||(S.counts[x.id]={SSR:0,SR:0,R:0});
+    c[x.rar]++;
+  }
+  S.total+=n;
+  S.hist.unshift({t:Date.now(),n,r:res.map(x=>[x.id,x.rar])});
+  S.hist=S.hist.slice(0,100);
+  save();
+  current=res;
+  renderDraw(res);
+  renderStats();renderDex();renderHist();
+}
+
+/* ---------- パック開封 ---------- */
+const packfx=$("#packfx"),tearZone=$("#tearZone"),tearProgress=$("#tearProgress");
+let packBusy=false,tearStart=null,packResolve=null,packOpened=false;
+function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern)}catch(e){}}
+function packSparks(){
+  const box=$("#packSparks");box.innerHTML="";
+  for(let i=0;i<28;i++){
+    const s=document.createElement("i");
+    const a=Math.random()*Math.PI*2,d=70+Math.random()*190;
+    s.style.setProperty("--x",Math.cos(a)*d+"px");
+    s.style.setProperty("--y",Math.sin(a)*d+"px");
+    s.style.setProperty("--d",(Math.random()*.09)+"s");
+    box.appendChild(s);
+  }
+}
+function openPack(){
+  if(packOpened)return;
+  packOpened=true;tearStart=null;tearProgress.style.width="100%";
+  packfx.classList.add("opening");
+  packSparks();
+  vibrate(packfx.classList.contains("has-oshi-ssr")?[22,35,22,35,90]:packfx.classList.contains("has-ssr")?[35,45,70]:35);
+  $("#packHint").textContent=packfx.classList.contains("has-oshi-ssr")?"……これは、かなりアツい。":packfx.classList.contains("has-ssr")?"光が漏れてる…！":"OPEN!";
+  setTimeout(()=>{if(packResolve)packResolve()},reduce?120:620);
+}
+function playPack(n,res){
+  return new Promise(resolve=>{
+    packResolve=()=>{
+      packfx.hidden=true;packfx.className="packfx";tearProgress.style.width="0";$("#packSparks").innerHTML="";
+      packResolve=null;resolve();
+    };
+    packOpened=false;tearStart=null;
+    const ssr=res.some(x=>x.rar==="SSR");
+    const oshiSSR=res.some(x=>x.rar==="SSR"&&isOshi(x.id));
+    packfx.className="packfx"+(ssr?" has-ssr":"")+(oshiSSR?" has-oshi-ssr":"");
+    $("#packCount").textContent=n===10?"10":"1";
+    $("#packKicker").textContent=oshiSSR?"♥ SOMETHING SPECIAL…":ssr?"…なんか光ってない？":"READY?";
+    $("#packHint").textContent=reduce?"タップで開封":"切り取り線を右へなぞって開封";
+    packfx.hidden=false;packfx.focus();
+    requestAnimationFrame(()=>packfx.classList.add("ready"));
+    vibrate(ssr?[16,50,16]:12);
+  });
+}
+function tearMove(e){
+  if(tearStart===null||packOpened)return;
+  const w=tearZone.getBoundingClientRect().width;
+  const d=Math.max(0,e.clientX-tearStart);
+  const p=Math.min(1,d/(w*.7));
+  tearProgress.style.width=(p*100)+"%";
+  if(p>=1)openPack();
+}
+tearZone.addEventListener("pointerdown",e=>{if(packOpened)return;tearStart=e.clientX;tearZone.setPointerCapture(e.pointerId);vibrate(8)});
+tearZone.addEventListener("pointermove",tearMove);
+tearZone.addEventListener("pointerup",()=>{if(!packOpened){tearStart=null;tearProgress.style.width="0"}});
+tearZone.addEventListener("pointercancel",()=>{tearStart=null;if(!packOpened)tearProgress.style.width="0"});
+$("#packTap").onclick=openPack;
+packfx.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&!packOpened){e.preventDefault();openPack()}});
+async function pull(n){
+  if(packBusy)return;
+  packBusy=true;setBusy(true);
+  const res=makeRoll(n);
+  await playPack(n,res);
+  commitRoll(n,res);
+  packBusy=false;setBusy(false);
+}
+
+function faceHTML(m,rar,isNew){
+  const img=S.images[m.id];
+  const face=img?`<img src="${img}" alt="">`:`<div class="ph" aria-hidden="true">${[...m.name][0]}</div>`;
+  return `<div class="face">${isNew?'<span class="new">NEW</span>':""}${face}<span class="rar">${rar}</span><div class="nm">${isOshi(m.id)?'<span class="hh">♥ </span>':""}${m.name}<small>${m.group}</small></div></div>`;
+}
+function cardHTML(m,rar,{isNew=false,open=true,hint=false}={}){
+  return `<div class="card r-${rar}${open?" open":""}${hint?" hint-ssr":""}" style="--c:${col(m)}" tabindex="0" role="button" aria-label="${open?m.name+" "+rar:"裏向きのカード"}">
+    <div class="in"><div class="back"><span>MILPRO</span></div>${faceHTML(m,rar,isNew)}</div></div>`;
+}
+
+let flipping=false;
+function renderDraw(res){
+  const g=$("#grid");
+  g.className="grid"+(res.length===1?" single":"");
+  g.innerHTML=res.map(x=>cardHTML(byId[x.id],x.rar,{isNew:x.isNew,open:false,hint:x.rar==="SSR"})).join("");
+  const cards=[...g.querySelectorAll(".card")];
+  const opens=cards.map((el,i)=>async()=>{
+    if(el.classList.contains("open")||el.dataset.busy)return;
+    el.dataset.busy="1";
+    const x=res[i];
+    if(x.rar==="SSR"&&wantsFx(x.id))await playSSR(x);
+    el.classList.add("open");
+    el.setAttribute("aria-label",byId[x.id].name+" "+x.rar);
+    check();
+  });
+  cards.forEach((el,i)=>{
+    el.addEventListener("click",()=>{if(!flipping)opens[i]()});
+    el.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&!flipping){e.preventDefault();opens[i]()}});
+  });
+  $("#flipAll").hidden=false;$("#copyRes").hidden=true;
+  function check(){if(cards.every(c=>c.classList.contains("open"))){$("#flipAll").hidden=true;$("#copyRes").hidden=false}}
+  $("#flipAll").onclick=async()=>{
+    if(flipping)return;flipping=true;setBusy(true);
+    for(let i=0;i<cards.length;i++){
+      if(cards[i].classList.contains("open"))continue;
+      await opens[i]();
+      if(!reduce)await sleep(110);
+    }
+    flipping=false;setBusy(false);
+  };
+}
+function setBusy(b){$("#pull1").disabled=b;$("#pull10").disabled=b}
+function wantsFx(id){return S.fxMode==="all"||(S.fxMode==="oshi"&&isOshi(id))}
+
+/* ---------- SSR 演出 ---------- */
+const fx=$("#fx"),cv=$("#fxCanvas"),ctx=cv.getContext("2d");
+let parts=[],raf=0;
+function burst(color,oshi){
+  const w=cv.width,h=cv.height,dpr=devicePixelRatio||1;
+  const glyphs=oshi?["♥","♥","♥","♠","♦","♣"]:["♠","♥","♦","♣"];
+  for(let i=0;i<(oshi?110:80);i++){
+    const a=Math.random()*Math.PI*2,s=(4+Math.random()*9)*dpr;
+    const g=glyphs[Math.floor(Math.random()*glyphs.length)];
+    parts.push({x:w/2,y:h/2,vx:Math.cos(a)*s,vy:Math.sin(a)*s-3*dpr,g,
+      c:g==="♥"&&oshi?(Math.random()<.5?"#ff7aa8":color):(Math.random()<.6?"#e8c46a":"#fff0b8"),
+      size:(12+Math.random()*22)*dpr,rot:Math.random()*6,vr:(Math.random()-.5)*.2,life:1});
+  }
+}
+function rain(color,oshi){
+  const w=cv.width,dpr=devicePixelRatio||1;
+  for(let i=0;i<2;i++)parts.push({x:Math.random()*w,y:-20,vx:(Math.random()-.5)*dpr,vy:(1+Math.random()*2)*dpr,
+    g:oshi?"♥":["♠","♥","♦","♣"][Math.floor(Math.random()*4)],c:oshi?(Math.random()<.5?"#ff7aa8":color):"#e8c46a",
+    size:(10+Math.random()*14)*dpr,rot:0,vr:(Math.random()-.5)*.05,life:1,slow:1});
+}
+function loop(color,oshi){
+  const dpr=devicePixelRatio||1;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  if(Math.random()<.5)rain(color,oshi);
+  parts=parts.filter(p=>p.life>0&&p.y<cv.height+40);
+  for(const p of parts){
+    p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;
+    if(!p.slow){p.vy+=.18*dpr;p.vx*=.985;p.life-=.008}else p.life-=.002;
+    ctx.save();ctx.globalAlpha=Math.max(0,Math.min(1,p.life*1.4));ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+    ctx.fillStyle=p.c;ctx.font=`${p.size}px sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(p.g,0,0);ctx.restore();
+  }
+  raf=requestAnimationFrame(()=>loop(color,oshi));
+}
+function playSSR(x){
+  return new Promise(resolve=>{
+    const m=byId[x.id],oshi=isOshi(x.id),c=col(m);
+    const dpr=devicePixelRatio||1;
+    cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;parts=[];
+    fx.style.setProperty("--mc",oshi?c:"var(--gold)");
+    $("#fxCard").innerHTML=faceHTML(m,"SSR",x.isNew);
+    $("#fxCard").className="big r-SSR";$("#fxCard").style.setProperty("--c",c);
+    $("#fxName").innerHTML=`${m.name}<small>${m.group}${x.isNew?"・NEW":""}</small>`;
+    $("#fxOshi").hidden=!oshi;
+    fx.className="fx";fx.hidden=false;fx.focus();
+    let stage=0,timer;
+    const reveal=()=>{
+      if(stage>=2)return;stage=2;clearTimeout(timer);
+      fx.className="fx p2";
+      if(!reduce){burst(c,oshi);cancelAnimationFrame(raf);loop(c,oshi)}
+      setTimeout(()=>{stage=3},reduce?100:500);
+    };
+    const close=()=>{
+      cancelAnimationFrame(raf);ctx.clearRect(0,0,cv.width,cv.height);parts=[];
+      fx.hidden=true;fx.className="fx";
+      fx.removeEventListener("click",onTap);document.removeEventListener("keydown",onKey);
+      resolve();
+    };
+    const onTap=()=>{if(stage<2)reveal();else if(stage===3)close()};
+    const t0=performance.now();
+    const onKey=e=>{if(performance.now()-t0<300)return;if(["Enter"," ","Escape"].includes(e.key)){e.preventDefault();onTap()}};
+    fx.addEventListener("click",onTap);document.addEventListener("keydown",onKey);
+    if(reduce){reveal();return}
+    requestAnimationFrame(()=>{fx.className="fx p1";stage=1;timer=setTimeout(reveal,1050)});
+  });
+}
+
+/* ---------- 推し ---------- */
+function toggleOshi(id){
+  S.oshi=isOshi(id)?S.oshi.filter(x=>x!==id):[...S.oshi,id];
+  if(S.pickup==="__oshi"&&!S.oshi.length)S.pickup="";
+  save();renderOshi();renderPick();renderDex();renderStats();renderHist();
+  toast(isOshi(id)?`${byId[id].name}を推しに登録しました`:`${byId[id].name}の推し登録を外しました`);
+}
+function renderOshi(){
+  const list=S.oshi.filter(id=>byId[id]);
+  $("#ochips").innerHTML=list.length?list.map(id=>{const m=byId[id];const img=S.images[id];
+    return `<span class="ochip" style="--c:${col(m)}"><i>${img?`<img src="${img}" alt="">`:[...m.name][0]}</i>${m.name}</span>`}).join("")
+    :'<span class="oempty">まだ登録されていません</span>';
+  $("#oshiEdit").textContent=list.length?"推しを編集":"推しを登録";
+  $("#picker").innerHTML='<p>推しにしたいメンバーを選んでください（何人でも登録できます）</p>'+MEMBERS.map(m=>
+    `<button class="pk" style="--c:${col(m)}" aria-pressed="${isOshi(m.id)}" data-oshi="${m.id}">${m.name}</button>`).join("");
+}
+$("#oshiEdit").onclick=()=>{const p=$("#picker");p.hidden=!p.hidden;$("#oshiEdit").setAttribute("aria-expanded",!p.hidden)};
+$("#picker").addEventListener("click",e=>{const b=e.target.closest("[data-oshi]");if(b)toggleOshi(b.dataset.oshi)});
+$("#dex").addEventListener("click",e=>{const b=e.target.closest("[data-oshi]");if(b)toggleOshi(b.dataset.oshi)});
+
+/* ---------- views ---------- */
+function renderStats(){
+  $("#stTotal").textContent=S.total;
+  $("#stSSR").textContent=Object.values(S.counts).reduce((a,c)=>a+c.SSR,0);
+  $("#stOshi").textContent=S.oshi.reduce((a,id)=>a+(S.counts[id]?S.counts[id].SSR:0),0);
+  const owned=MEMBERS.filter(m=>{const c=S.counts[m.id];return c&&(c.SSR+c.SR+c.R)>0}).length;
+  $("#stDex").textContent=owned+"/"+MEMBERS.length;
+}
+function bestRar(c){return !c?"R":c.SSR?"SSR":c.SR?"SR":"R"}
+function renderDex(){
+  const order=[...MEMBERS].sort((a,b)=>isOshi(b.id)-isOshi(a.id));
+  $("#dex").innerHTML=order.map(m=>{
+    const c=S.counts[m.id];const has=c&&(c.SSR+c.SR+c.R)>0;
+    return `<div class="item${has?"":" unowned"}">
+      <button class="heartbtn" data-oshi="${m.id}" aria-pressed="${isOshi(m.id)}" aria-label="${m.name}を推しに登録">${isOshi(m.id)?"♥":"♡"}</button>
+      ${cardHTML(m,bestRar(c))}
+      <div class="counts"><span class="s">SSR ${c?c.SSR:0}</span><span class="sr">SR ${c?c.SR:0}</span><span>R ${c?c.R:0}</span></div></div>`;
+  }).join("");
+  $("#dex").querySelectorAll(".card").forEach(e=>{e.removeAttribute("tabindex");e.removeAttribute("role")});
+}
+function fmt(t){const d=new Date(t);const p=n=>String(n).padStart(2,"0");return `${d.getMonth()+1}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`}
+function renderHist(){
+  if(!S.hist.length){$("#hist").innerHTML='<li><span class="note" style="margin:0">まだ履歴はありません。最新100回分まで残ります。</span></li>';return}
+  $("#hist").innerHTML=S.hist.map(h=>{
+    const r=[...h.r].sort((a,b)=>"SSR SR R".indexOf(a[1])-"SSR SR R".indexOf(b[1]));
+    return `<li><time>${fmt(h.t)}・${h.n===10?"10連":"単発"}</time>${r.map(([id,rar])=>`<span class="chip ${rar}">${isOshi(id)?'<span class="hh">♥</span>':""}${rar} ${byId[id]?byId[id].name:id}</span>`).join("")}</li>`;
+  }).join("");
+}
+function renderPick(){
+  const n=S.oshi.length;
+  $("#pickSel").innerHTML='<option value="">なし（全員同確率）</option>'+
+    (n?`<option value="__oshi"${S.pickup==="__oshi"?" selected":""}>♥ 登録した推し（${n}人）</option>`:"")+
+    MEMBERS.map(m=>`<option value="${m.id}"${S.pickup===m.id?" selected":""}>${m.name}</option>`).join("");
+  $("#rates").textContent=`SSR ${RATE.SSR}% / SR ${RATE.SR}% / R ${RATE.R}%`+(S.pickup?"・ピックアップはSSRの50%":"")+"・10連は10枚目SR以上確定";
+}
+function renderSet(){
+  $("#setlist").innerHTML=MEMBERS.map(m=>{
+    const img=S.images[m.id];
+    return `<div class="set" style="--c:${col(m)}">
+      <div class="thumb">${img?`<img src="${img}" alt="">`:[...m.name][0]}</div>
+      <div class="meta"><b>${m.name}</b><span>${m.en?m.en+"・":""}${m.group}</span></div>
+      <div class="ctl">
+        <input type="color" id="c-${m.id}" value="${col(m)}" aria-label="${m.name}のカラー" data-id="${m.id}">
+        <button class="mini" data-up="${m.id}">${img?"変更":"画像"}</button>
+        ${img?`<button class="mini" data-del="${m.id}" aria-label="${m.name}の画像を削除">×</button>`:""}
+      </div></div>`;
+  }).join("");
+  $("#fxMode").value=S.fxMode;
+}
+function renderAll(){renderStats();renderOshi();renderDex();renderHist();renderPick();renderSet()}
+
+/* ---------- images ---------- */
+function shrink(file){
+  return new Promise((ok,ng)=>{
+    const fr=new FileReader();
+    fr.onload=()=>{const im=new Image();im.onload=()=>{
+      const max=520;const k=Math.min(1,max/Math.max(im.width,im.height));
+      const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      ok(c.toDataURL(file.type==="image/png"?"image/webp":"image/jpeg",.85));
+    };im.onerror=ng;im.src=fr.result};
+    fr.onerror=ng;fr.readAsDataURL(file);
+  });
+}
+function matchMember(fname){
+  const f=fname.toLowerCase().replace(/\.[^.]+$/,"").normalize("NFKC");
+  return MEMBERS.find(m=>f.includes(m.name.normalize("NFKC")))||MEMBERS.find(m=>m.keys.some(k=>f.includes(k)));
+}
+let target=null;
+$("#oneIn").addEventListener("change",async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f||!target)return;
+  const prev=S.images[target];
+  S.images[target]=await shrink(f);
+  if(!save()){if(prev)S.images[target]=prev;else delete S.images[target]}
+  renderAll();if(current.length)renderDraw(current);
+});
+$("#bulkIn").addEventListener("change",async e=>{
+  const files=[...e.target.files];e.target.value="";let ok=0;const miss=[];
+  for(const f of files){const m=matchMember(f.name);if(!m){miss.push(f.name);continue}S.images[m.id]=await shrink(f);ok++}
+  save();renderAll();
+  $("#bulkMsg").textContent=`${ok}枚を割り当てました`+(miss.length?`。名前が見つからなかったファイル：${miss.join("、")}`:"");
+});
+$("#setlist").addEventListener("click",e=>{
+  const up=e.target.closest("[data-up]"),del=e.target.closest("[data-del]");
+  if(up){target=up.dataset.up;$("#oneIn").click()}
+  if(del){delete S.images[del.dataset.del];save();renderAll()}
+});
+$("#setlist").addEventListener("input",e=>{
+  if(e.target.type!=="color")return;
+  S.colors[e.target.dataset.id]=e.target.value;save();
+  e.target.closest(".set").style.setProperty("--c",e.target.value);
+  renderDex();renderOshi();
+});
+$("#fxMode").onchange=e=>{S.fxMode=e.target.value;save()};
+
+/* ---------- controls ---------- */
+$("#pull1").onclick=()=>pull(1);
+$("#pull10").onclick=()=>pull(10);
+$("#pickSel").onchange=e=>{S.pickup=e.target.value;save();renderPick()};
+$("#copyRes").onclick=async()=>{
+  const txt="ミリプロ推しガチャ結果\n"+current.map(x=>`${x.rar} ${isOshi(x.id)?"♥":""}${byId[x.id].name}`).join("\n");
+  try{await navigator.clipboard.writeText(txt);toast("コピーしました")}catch(e){toast("コピーできませんでした")}
+};
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===t));
+  ["dex","hist","set"].forEach(k=>$("#p-"+k).hidden=k!==t.dataset.tab);
+});
+let pending=null;
+function twoStep(btn,msg,fn){
+  btn.onclick=()=>{
+    if(pending===btn){fn();pending=null;$("#confirmMsg").textContent="";save();renderAll();toast("リセットしました");return}
+    pending=btn;$("#confirmMsg").textContent=msg+" もう一度押すと実行します。";
+  };
+}
+twoStep($("#resetHist"),"図鑑と履歴を消します（推し登録は残ります）。",()=>{S.counts={};S.hist=[];S.total=0});
+twoStep($("#resetImg"),"設定した画像を消します。",()=>{S.images={}});
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1800)}
+
+renderAll();
+</script>
+
+</body></html>
