@@ -491,7 +491,7 @@ tearZone.addEventListener("pointerup",()=>{if(!packOpened){tearStart=null;tearPr
 tearZone.addEventListener("pointercancel",()=>{tearStart=null;if(!packOpened)tearProgress.style.width="0"});
 $("#packTap").onclick=openPack;
 packfx.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&!packOpened){e.preventDefault();openPack()}});
-async function pull(n){
+async async function pull(n){
   if(packBusy)return;
   packBusy=true;setBusy(true);
   const res=makeRoll(n);
