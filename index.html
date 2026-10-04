@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ミリプロ バッジガチャ</title>
+  <meta name="description" content="ミリプロメンバーの表情差分バッジを集める非公式ファンメイドガチャ。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <p class="eyebrow">MILPRO FANMADE GACHA</p>
+    <h1>ミリプロ<br><span>バッジガチャ</span></h1>
+    <p class="lead">推しを選んで、表情ちがいのバッジを集めよう。</p>
+  </header>
+
+  <section class="setup card">
+    <label class="field">
+      <span>推しを選ぶ</span>
+      <select id="oshi"></select>
+    </label>
+    <div class="rate-note">金バッジ対象：虹深°ぬふ / ゆらぎゆら / 小廻こま</div>
+  </section>
+
+  <section class="machine card">
+    <div class="machine-top">
+      <span>BADGE CAPSULE</span>
+      <b id="countLabel">0 pulls</b>
+    </div>
+    <div class="window" id="window" aria-live="polite">
+      <div class="idle">
+        <div class="capsule-art">?</div>
+        <p>タップしてガチャを回してね</p>
+      </div>
+    </div>
+    <button class="pull" id="pullBtn">ガチャを回す</button>
+  </section>
+
+  <section class="tabs">
+    <button data-tab="collection" class="active">コレクション</button>
+    <button data-tab="history">履歴</button>
+  </section>
+  <section id="panel" class="panel card"></section>
+
+  <footer>
+    非公式ファンメイドです。Million Production / 各タレント・関係者とは関係ありません。
+  </footer>
+</main>
+
+<dialog id="detail"></dialog>
+<script src="assets/app.js"></script>
+</body>
+</html>
