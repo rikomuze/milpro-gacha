@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "note": "Canvaで表情差分PNGを作成後、この配列へ追加して assets/app.js のBADGESを置き換える。",
+  "goldMembers": [
+    "nijipuka-nuhu",
+    "yuragi-yura",
+    "komawari-koma"
+  ],
+  "badges": []
+}
